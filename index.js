@@ -4,8 +4,8 @@ const AWS = require('aws-sdk');
 const shell = require('shelljs');
 const path = require('path');
 const { map, mergeMap } = require("rxjs/operators");
-const functionHelper = require('serverless-offline/src/functionHelper');
-const createLambdaContext = require('serverless-offline/src/createLambdaContext');
+const functionHelper = require('serverless-offline-python/src/functionHelper');
+const createLambdaContext = require('serverless-offline-python/src/createLambdaContext');
 
 const defaultOptions = {
   port: 4569,
@@ -281,6 +281,7 @@ class ServerlessS3Local {
 
         const lambdaContext = createLambdaContext(serviceFunction);
         const funOptions = functionHelper.getFunctionOptions(serviceFunction, key, servicePath);
+        funOptions["serviceRuntime"] = "python3.6"
 
         const func = (s3Event) => {
           const baseEnvironment = {
@@ -443,7 +444,7 @@ class ServerlessS3Local {
 
   _setOptions() {
     const config = (this.serverless.service.custom && this.serverless.service.custom.s3) || {};
-    this.options = Object.assign({}, defaultOptions, (this.service.custom || {})['serverless-offline'], this.options, config);
+    this.options = Object.assign({}, defaultOptions, (this.service.custom || {})['serverless-offline-python'], this.options, config);
   }
 }
 
